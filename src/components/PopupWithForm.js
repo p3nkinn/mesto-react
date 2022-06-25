@@ -1,19 +1,27 @@
 import React from "react";
 
-const PopupWithForm = (props) => {
-    return (
-        <div className={`${props.classPopup} ${props.isOpen ? 'popup_opened' : ''}`}>
-        <div className="popup__container">
-          <form name={props.formName}  action="#" className={props.formClass}>
-          <h2 className="popup__title">{props.popupTitle}</h2>
-          {props.children}
-          <button type="submit" className="popup__button">{props.textBtn}</button>
-          <button type="button" onClick={props.onClose} className={`popup__close popup__close_${props.classBtn}`} aria-label="закрыть"></button>
+const PopupWithForm = ({classPopup, isOpen, formName, formClass, popupTitle, children, textBtn, onClose, classBtn}) => {
+  return (
+    <div
+      className={`popup popup_${classPopup} ${isOpen ? "popup_opened" : ""}`}
+    >
+      <div className="popup__container">
+        <form name={formName} action="#" className={formClass}>
+          <h2 className="popup__title">{popupTitle}</h2>
+          {children}
+          <button type="submit" className="popup__button">
+            {textBtn}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className={`popup__close popup__close_${classBtn}`}
+            aria-label="закрыть"
+          ></button>
         </form>
-        </div>
- 
-    </div> 
-    )        
-}
+      </div>
+    </div>
+  );
+};
 
 export default PopupWithForm;
