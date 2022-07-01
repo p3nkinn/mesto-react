@@ -1,19 +1,19 @@
 import React from "react";
 
-const Card = (props) => {
+const Card = ({card, onCardClick}) => {
   const handleClick = () => {
-    props.onCardClick(props.card);
+    onCardClick(card)
   };
   return (
     <li className="elements__item">
       <img
         onClick={handleClick}
-        src={props.card.link}
-        alt={props.card.name}
+        src={card.link}
+        alt={card.name}
         className="elements__image"
       />
       <div className="elements__description">
-        <h3 className="elements__title">{props.card.name}</h3>
+        <h3 className="elements__title">{card.name}</h3>
         <div className="elements__hearts">
           <button
             type="button"
@@ -21,7 +21,7 @@ const Card = (props) => {
             aria-label="лайк"
           ></button>
           <span className="elements__likes_count">
-            {props.card.likes.length}
+            {card.likes.length}
           </span>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import Card from "./Card";
 import { api } from "../utils/Api";
 
-const Main = (props) => {
+const Main = ({onAddPlace, onEditAvatar, onCardClick, onEditProfile}) => {
   const [userName, setUserName] = React.useState();
   const [userDescription, setUserDescription] = React.useState();
   const [userAvatar, setUserAvatar] = React.useState();
@@ -23,10 +23,10 @@ const Main = (props) => {
       <section className="profile">
         <div className="profile__container">
           <div className="profile__item">
-            <div onClick={props.onEditAvatar} className="profile__redaction">
+            <div onClick={onEditAvatar} className="profile__redaction">
               <img
                 className="profile__image"
-                src={`${userAvatar}`}
+                src={userAvatar}
                 alt="Аватар пользователя"
               />
             </div>
@@ -34,7 +34,7 @@ const Main = (props) => {
               <h1 className="profile__title">{userName}</h1>
               <p className="profile__subtitle">{userDescription}</p>
               <button
-                onClick={props.onEditProfile}
+                onClick={onEditProfile}
                 type="button"
                 className="profile__edit-button"
                 aria-label="редактировать"
@@ -42,7 +42,7 @@ const Main = (props) => {
             </div>
           </div>
           <button
-            onClick={props.onAddPlace}
+            onClick={onAddPlace}
             type="button"
             className="profile__add-button"
             aria-label="добавить"
@@ -53,7 +53,7 @@ const Main = (props) => {
         <ul className="elements__list">
           {cards.map((cardItems) => (
             <Card
-              onCardClick={props.onCardClick}
+              onCardClick={onCardClick}
               card={cardItems}
               key={cardItems._id}
             ></Card>
