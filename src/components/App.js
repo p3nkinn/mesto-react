@@ -5,6 +5,8 @@ import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import { api } from "../utils/Api";
 
@@ -74,6 +76,31 @@ const App = () => {
     });
   }
 
+  const handleUpdateUser = (userData) => {
+    api.setProfileInfo(userData)
+    .then((userData) => {
+      setCurrentUser(userData)
+      closeAllPopups()
+    })
+    .catch(err => `${err}`)
+  }
+
+  const handleUpdateAvatar = (userData) => {
+    api.addNewAvatar(userData)
+    .then(userData => {
+      setCurrentUser(userData)
+      closeAllPopups()
+    })
+    .catch(err => `${err}`)
+  }
+
+  const handleAddPlaceSubmit = (userData) => {
+    api.addNewCard(userData)
+    .then(userData => {
+      setCards([userData, ...cards])
+    })
+  }
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -89,68 +116,9 @@ const App = () => {
       />
       <Footer />
 
-      <PopupWithForm
-        classPopup="newplaces"
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}
-        popupTitle="Новое место"
-        formName="newPlace"
-        formClass="popup__form popup__new-form"
-        children={
-          <>
-            <label className="popup__input-error">
-              <input
-                id="title-input"
-                name="name"
-                placeholder="Название"
-                required
-                type="text"
-                className="popup__input popup__input_type_title"
-              />
-              <span className="title-input-error popup__error popup__error_visible"></span>
-            </label>
-            <label className="popup__input-error">
-              <input
-                id="link-input"
-                name="link"
-                placeholder="Ссылка на картинку"
-                required
-                type="url"
-                className="popup__input popup__input_type_link"
-              />
-              <span className="link-input-error popup__error popup__error_visible"></span>
-            </label>
-          </>
-        }
-        textBtn="Создать"
-        classBtn="popup__close popup__close_newplaces"
-      />
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
-      <PopupWithForm
-        classPopup="avatar"
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-        popupTitle="Обновить аватар"
-        formName="newAvatar"
-        formClass="popup__form popup__new-avatar"
-        children={
-          <>
-            <label className="popup__input-error">
-              <input
-                id="link-avatar"
-                name="link"
-                placeholder="Ссылка на картинку"
-                required
-                type="url"
-                className="popup__input popup__input_type_link"
-              />
-              <span className="link-avatar-error popup__error popup__error_visible"></span>
-            </label>
-          </>
-        }
-        textBtn="Сохранить"
-        classBtn="popup__close popup__close_newavatar"
-      />
+      <AddPlacePopup onUpdateCard={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
+      <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+      <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
       <PopupWithForm
       classPopup="confirm"
       popupTitle="Вы уверены?"
