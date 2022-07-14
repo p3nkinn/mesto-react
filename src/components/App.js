@@ -4,6 +4,9 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import PopupWithForm from "./PopupWithForm";
+import EditProfilePopup from "./EditProfilePopup";
+import { CurrentUserContext } from "../context/CurrentUserContext";
+import { api } from "../utils/Api";
 
 const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -11,7 +14,25 @@ const App = () => {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
 
+  React.useEffect(() => {
+    api.getProfileInfo()
+  .then(userData => {
+    setCurrentUser( userData );
+  })
+  .catch((err) => `${err}`);
+  }, [])
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then(initialCards => {
+        setCards(initialCards);
+      })
+      .catch((err) => `${err}`);
+  }, []);
+  
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   };
@@ -36,14 +57,35 @@ const App = () => {
     setIsImagePopupOpen(false);
   };
 
+  const handleCardLike = (card) => {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+}
+
+  const handleCardDelete = (card) => {
+    api.deleteCard(card._id)
+    .then(() => {
+      const newCard = cards.filter(currentCard => currentCard !== card);
+      setCards(newCard);
+    });
+  }
+
   return (
     <div className="page">
+      <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
+        cards={cards}
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
         onCardClick={handleCardClick}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
       />
       <Footer />
 
@@ -83,40 +125,7 @@ const App = () => {
         textBtn="Создать"
         classBtn="popup__close popup__close_newplaces"
       />
-      <PopupWithForm
-        classPopup="profile"
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-        popupTitle="Редактировать профиль"
-        formName="editProfile"
-        formClass="popup__form popup__form_profile"
-        children={
-          <>
-            <label className="popup__input-error">
-              <input
-                id="name-input"
-                name="username"
-                type="text"
-                required
-                className="popup__input popup__input_type_username"
-              />
-              <span className="name-input-error popup__error popup__error_visible"></span>
-            </label>
-            <label className="popup__input-error">
-              <input
-                id="job-input"
-                name="userjob"
-                type="text"
-                required
-                className="popup__input popup__input_type_userjob"
-              />
-              <span className="job-input-error popup__error popup__error_visible"></span>
-            </label>
-          </>
-        }
-        textBtn="Сохранить"
-        classBtn="popup__close popup__close_profile"
-      />
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
       <PopupWithForm
         classPopup="avatar"
         isOpen={isEditAvatarPopupOpen}
@@ -155,6 +164,7 @@ const App = () => {
         onClose={closeAllPopups}
         card={selectedCard}
       />
+      </CurrentUserContext.Provider>
     </div>
   );
 };

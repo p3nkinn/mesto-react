@@ -1,6 +1,6 @@
 import React from "react";
 
-const PopupWithForm = ({classPopup, isOpen, formName, formClass, popupTitle, children, textBtn, onClose, classBtn}) => {
+const PopupWithForm = ({classPopup, isOpen, formName, formClass, popupTitle, children, textBtn, onClose, classBtn, onSubmit}) => {
   return (
     <div
       className={`popup popup_${classPopup} ${isOpen ? "popup_opened" : ""}`}
@@ -9,7 +9,7 @@ const PopupWithForm = ({classPopup, isOpen, formName, formClass, popupTitle, chi
         <form name={formName} action="#" className={formClass}>
           <h2 className="popup__title">{popupTitle}</h2>
           {children}
-          <button type="submit" className="popup__button">
+          <button onSubmit={onSubmit} type="submit" className="popup__button">
             {textBtn}
           </button>
           <button
