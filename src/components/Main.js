@@ -45,7 +45,7 @@ const Main = ({onAddPlace, onEditAvatar, onCardClick, onEditProfile, cards, onCa
               onCardLike={onCardLike}
               card={cardItems}
               key={cardItems._id}
-            ></Card>
+            />
           ))}
         </ul>
       </div>

@@ -9,7 +9,7 @@ const PopupWithForm = ({classPopup, isOpen, formName, formClass, popupTitle, chi
         <form onSubmit={onSubmit} name={formName} action="#" className={formClass}>
           <h2 className="popup__title">{popupTitle}</h2>
           {children}
-          <button onSubmit={onSubmit} type="submit" className="popup__button">
+          <button type="submit" className="popup__button">
             {textBtn}
           </button>
           <button

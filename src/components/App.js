@@ -25,7 +25,9 @@ const App = () => {
   .then(userData => {
     setCurrentUser( userData );
   })
-  .catch((err) => `${err}`);
+  .catch(err => {
+    console.log(`${err}`);
+  })
   }, [])
 
   React.useEffect(() => {
@@ -33,7 +35,9 @@ const App = () => {
       .then(initialCards => {
         setCards(initialCards);
       })
-      .catch((err) => `${err}`);
+      .catch(err => {
+        console.log(`${err}`);
+      })
   }, []);
   
   const handleEditAvatarClick = () => {
@@ -66,14 +70,16 @@ const App = () => {
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    });
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    })
 }
 
   const handleCardDelete = (card) => {
     api.deleteCard(card._id)
     .then(() => {
-      const newCard = cards.filter(currentCard => currentCard !== card);
-      setCards(newCard);
+      setCards((state) => state.filter((item) => item._id !== card._id));
     })
     .catch(err => {
       console.log(`${err}`);
