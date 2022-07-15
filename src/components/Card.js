@@ -1,30 +1,30 @@
 import React from "react";
 import { CurrentUserContext } from "../context/CurrentUserContext";
-const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
+const Card = ({ card, onCardClick, onCardLike, onCardDelete }) => {
   const currentUser = React.useContext(CurrentUserContext);
 
   const isOwn = card.owner._id === currentUser._id;
-  const isLiked = card.likes.some(i => i._id === currentUser._id);
+  const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-  const cardLikeButtonClassName = (
-    `elements__likes ${isLiked ? 'elements__likes_active' : ''}`
-  );
+  const cardLikeButtonClassName = `elements__likes ${
+    isLiked ? "elements__likes_active" : ""
+  }`;
 
-  const cardDeleteButtonClassName = (
-    `elements__remove ${isOwn ? 'elements__remove_active' : ''}`
-  ); 
+  const cardDeleteButtonClassName = `elements__remove ${
+    isOwn ? "elements__remove_active" : ""
+  }`;
 
   const handleClick = () => {
-    onCardClick(card) 
+    onCardClick(card);
   };
 
   const handleLikeClick = () => {
-    onCardLike(card)
+    onCardLike(card);
   };
 
   const handleCardDelete = () => {
-    onCardDelete(card)
-  }
+    onCardDelete(card);
+  };
 
   return (
     <li className="elements__item">
@@ -43,9 +43,7 @@ const Card = ({card, onCardClick, onCardLike, onCardDelete}) => {
             className={cardLikeButtonClassName}
             aria-label="лайк"
           ></button>
-          <span className="elements__likes_count">
-            {card.likes.length}
-          </span>
+          <span className="elements__likes_count">{card.likes.length}</span>
         </div>
       </div>
       <button
