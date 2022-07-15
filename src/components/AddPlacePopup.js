@@ -2,11 +2,26 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 const AddPlacePopup = ({isOpen, onClose, onUpdateCard}) => {
+  const [cardName , setCardName] = React.useState('');
+  const [cardLink, setCardLink] = React.useState('');
 
+  React.useEffect(() => {
+    setCardName('');
+    setCardLink('');
+  }, [isOpen]);
+
+  const handleCardName = (e) => {
+    setCardName(e.target.value);
+  }
+
+  const handleCardLink = (e) => {
+    setCardLink(e.target.value);
+  }
     const handleSubmit = (e) => {
         e.preventDefault();
         onUpdateCard({
-            
+          name: cardName,
+          link: cardLink
         })
     }
 
@@ -25,6 +40,8 @@ const AddPlacePopup = ({isOpen, onClose, onUpdateCard}) => {
               <input
                 id="title-input"
                 name="name"
+                value={cardName ? cardName : ''}
+                onChange={handleCardName}
                 placeholder="Название"
                 required
                 type="text"
@@ -36,6 +53,8 @@ const AddPlacePopup = ({isOpen, onClose, onUpdateCard}) => {
               <input
                 id="link-input"
                 name="link"
+                value={cardLink ? cardLink : ''}
+                onChange={handleCardLink}
                 placeholder="Ссылка на картинку"
                 required
                 type="url"

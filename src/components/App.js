@@ -9,6 +9,7 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import { api } from "../utils/Api";
+import { renderLoading } from "../utils/renderLoading";
 
 const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -73,31 +74,54 @@ const App = () => {
     .then(() => {
       const newCard = cards.filter(currentCard => currentCard !== card);
       setCards(newCard);
-    });
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    })
   }
 
   const handleUpdateUser = (userData) => {
+    renderLoading(".popup_profile", true);
     api.setProfileInfo(userData)
     .then((userData) => {
       setCurrentUser(userData)
       closeAllPopups()
     })
-    .catch(err => `${err}`)
+    .catch(err => {
+      console.log(`${err}`);
+    })
+    .finally(() => {
+      renderLoading(".popup_profile", false, 'Сохранить');
+    })
   }
 
   const handleUpdateAvatar = (userData) => {
+    renderLoading(".popup_avatar", true);
     api.addNewAvatar(userData)
     .then(userData => {
       setCurrentUser(userData)
       closeAllPopups()
     })
-    .catch(err => `${err}`)
+    .catch(err => {
+      console.log(`${err}`);
+    })
+    .finally(() => {
+      renderLoading(".popup_avatar", false, 'Сохранить');
+    })
   }
 
   const handleAddPlaceSubmit = (userData) => {
+    renderLoading(".popup_newplaces", true);
     api.addNewCard(userData)
     .then(userData => {
       setCards([userData, ...cards])
+      closeAllPopups()
+    })
+    .catch(err => {
+      console.log(`${err}`);
+    })
+    .finally(() => {
+      renderLoading(".popup_newplaces", false, 'Создать');
     })
   }
 
