@@ -34,8 +34,9 @@ const AddPlacePopup = ({isOpen, onClose, onUpdateCard}) => {
         popupTitle="Новое место"
         formName="newPlace"
         formClass="popup__form popup__new-form"
-        children={
-          <>
+        textBtn="Создать"
+        classBtn="popup__close popup__close_newplaces"
+          >
             <label className="popup__input-error">
               <input
                 id="title-input"
@@ -45,7 +46,7 @@ const AddPlacePopup = ({isOpen, onClose, onUpdateCard}) => {
                 placeholder="Название"
                 required
                 type="text"
-                className="popup__input popup__input_type_title"
+                className="popup__input popup__input_type_title" 
               />
               <span className="title-input-error popup__error popup__error_visible"></span>
             </label>
@@ -62,11 +63,9 @@ const AddPlacePopup = ({isOpen, onClose, onUpdateCard}) => {
               />
               <span className="link-input-error popup__error popup__error_visible"></span>
             </label>
-          </>
-        }
-        textBtn="Создать"
-        classBtn="popup__close popup__close_newplaces"
-      />
+          </PopupWithForm>
+        
+      
     )
 }
 
